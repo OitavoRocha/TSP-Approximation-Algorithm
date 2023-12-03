@@ -1,6 +1,7 @@
 # https://github.com/CarlEkerot/held-karp/tree/master
 import itertools
 import sys
+import time
 
 
 def readAdjacencyMatrix(file_path):
@@ -20,6 +21,7 @@ def readAdjacencyMatrix(file_path):
 
 
 def heldKarp(dists):
+    count = 0
     n = len(dists)
     C = {}
 
@@ -38,6 +40,7 @@ def heldKarp(dists):
 
                 res = []
                 for m in subset:
+                    count += 1
                     if m == 0 or m == k:
                         continue
                     res.append((C[(prev, m)][0] + dists[m][k], m))
@@ -60,7 +63,7 @@ def heldKarp(dists):
 
     path.append(0)
 
-    return opt, list(reversed(path))
+    return opt, list(reversed(path)), count
 
 
 def main():
@@ -72,4 +75,6 @@ def main():
 
 
 if __name__ == '__main__':
+    startTime = time.time()
     main()
+    print("--- %s seconds ---" % (time.time() - startTime))
