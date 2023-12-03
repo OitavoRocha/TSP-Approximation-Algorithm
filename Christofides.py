@@ -47,6 +47,7 @@ def prim(matrix, nodes, num_edges):
     adjacency_matrix = np.array(adjacency_matrix)
     return adjacency_matrix, cost
 
+
 def main():
     num_edges = 1
     args = sys.argv[1]
@@ -61,6 +62,7 @@ def main():
 
     cycle = fleuryAlgo(MinSpanTree, 0)
     cycle = removeDuplicates(cycle)
+    print("Cycle: ", cycle)
     print(calculateCost(cycle, matrix))
 
 
