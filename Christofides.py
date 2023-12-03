@@ -1,6 +1,4 @@
 import numpy as np
-import random
-
 
 INT_MAX = 9999999
 
@@ -48,37 +46,25 @@ def prim(matrix, nodes, num_edges):
     return adjacency_matrix, cost
 
 def main():
-    nodes = 11
-    num_edges = 110
+    num_edges = 1
 
-    matrix_values = [
-    [0, 29, 20, 21, 16, 31, 100, 12, 4, 31, 18],
-    [29, 0, 15, 29, 28, 40, 72, 21, 29, 41, 12],
-    [20, 15, 0, 15, 14, 25, 81, 9, 23, 27, 13],
-    [21, 29, 15, 0, 4, 12, 92, 12, 25, 13, 25],
-    [16, 28, 14, 4, 0, 16, 94, 9, 20, 16, 22],
-    [31, 40, 25, 12, 16, 0, 95, 24, 36, 3, 37],
-    [100, 72, 81, 92, 94, 95, 0, 90, 101, 99, 84],
-    [12, 21, 9, 12, 9, 24, 90, 0, 15, 25, 13],
-    [4, 29, 23, 25, 20, 36, 101, 15, 0, 35, 18],
-    [31, 41, 27, 13, 16, 3, 99, 25, 35, 0, 38],
-    [18, 12, 13, 25, 22, 37, 84, 13, 18, 38, 0]
-]
+    matrix_values = readAdjacencyMatrix("tsp1_253.txt")
+    nodes = len(matrix_values)
     
     matrix = np.array(matrix_values)
 
     MinSpanTree, cost = prim(matrix, nodes, num_edges)
-
-    print(MinSpanTree)
-    # print("Cost: ", cost)
-    print("")
-    # print("Odd degree", findOddDegreeNodes(MinSpanTree))
-    # minimum_weight_matching(MinSpanTree, matrix, findOddDegreeNodes(MinSpanTree))
     minimumPerfectWeightMatching(MinSpanTree, matrix, findOddDegreeNodes(MinSpanTree))
     print("MST")
     print(MinSpanTree)
-    findEulerianCircuit(MinSpanTree)
-    
+
+    cycle = fleuryAlgo(MinSpanTree, 0)
+    print(cycle)
+    cycle = removeDuplicates(cycle)
+    print(cycle)
+    print(calculateCost(cycle, matrix))
+
+
 
 """
         0  1  2  3  4  5  6  7  8  9 10 
@@ -135,33 +121,48 @@ def minimumPerfectWeightMatching(MinSpanTree, G, odd_vert):
             used.append(all_matches[i][2])
         if len(used) == len(odd_vert):
             break
-
-        
-def findEulerianCircuit(MinSpanTree):
-    eulerianCircuit = []
-    for i in range(len(MinSpanTree)):
-        for j in range(len(MinSpanTree)):
-            if MinSpanTree[i][j] != 0:
-                eulerianCircuit.append((i, j))
-    print(eulerianCircuit) 
-    return eulerianCircuit
-
-
-def findHamiltonianCircuit(eulerianCircuit, startNode):
-    hamiltonianCircuit = []
-    for i in range(len(eulerianCircuit)):
-        if eulerianCircuit[i][0] == startNode:
-            hamiltonianCircuit.append(eulerianCircuit[i])
-            eulerianCircuit.pop(i)
-            break
-    while len(eulerianCircuit) > 0:
-        for i in range(len(eulerianCircuit)):
-            if eulerianCircuit[i][0] == hamiltonianCircuit[-1][1]:
-                hamiltonianCircuit.append(eulerianCircuit[i])
-                eulerianCircuit.pop(i)
-                break
-    return hamiltonianCircuit
     
+def fleuryAlgo(MinSpanTree, startNode):
+    stack = []
+    stack.append(startNode)
+    circuit = []
+    while len(stack) != 0:
+        top = stack[-1]
+        for i in range(len(MinSpanTree)):
+            if MinSpanTree[top][i] != 0:
+                stack.append(i)
+                MinSpanTree[top][i] = 0
+                MinSpanTree[i][top] = 0
+                break
+        if top == stack[-1]:
+            circuit.append(stack.pop())
+    return circuit
+
+def removeDuplicates(circuit):
+    cycle = [circuit[i] for i in range(len(circuit)) if circuit[i] not in circuit[:i]]
+    cycle.append(circuit[0])
+    return cycle
+
+def calculateCost(cycle, G):
+    cost = 0
+    for i in range(len(cycle)-1):
+        cost += G[cycle[i]][cycle[i+1]]
+    return cost
+
+def readAdjacencyMatrix(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            lines = file.readlines()
+
+            adjacency_matrix = [list(map(int, line.strip().split())) for line in lines]
+
+            return adjacency_matrix
+    except FileNotFoundError:
+        print(f"File '{file_path}' not found.")
+        return None
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
 
 if __name__ == '__main__':
     main()
