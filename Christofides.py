@@ -1,4 +1,6 @@
 import numpy as np
+import time
+import sys
 
 INT_MAX = 9999999
 
@@ -47,56 +49,20 @@ def prim(matrix, nodes, num_edges):
 
 def main():
     num_edges = 1
+    args = sys.argv[1]
 
-    matrix_values = readAdjacencyMatrix("tsp1_253.txt")
+    matrix_values = readAdjacencyMatrix(args)
     nodes = len(matrix_values)
     
     matrix = np.array(matrix_values)
 
     MinSpanTree, cost = prim(matrix, nodes, num_edges)
     minimumPerfectWeightMatching(MinSpanTree, matrix, findOddDegreeNodes(MinSpanTree))
-    print("MST")
-    print(MinSpanTree)
 
     cycle = fleuryAlgo(MinSpanTree, 0)
-    print(cycle)
     cycle = removeDuplicates(cycle)
-    print(cycle)
     print(calculateCost(cycle, matrix))
 
-
-
-"""
-        0  1  2  3  4  5  6  7  8  9 10 
-   0  [ 0  0  0  0  0  0  0 12  4  0  0]
-   1  [ 0  0  0  0  0  0 72  0  0  0 12]
-   2  [ 0  0  0  0  0  0  0  9  0  0 13]
-   3  [ 0  0  0  0  4 12  0  0  0  0  0]
-   4  [ 0  0  0  4  0  0  0  9  0  0  0]
-   5  [ 0  0  0 12  0  0  0  0  0  3  0]
-   6  [ 0 72  0  0  0  0  0  0  0 99  0]
-   7  [12  0  9  0  9  0  0  0 15  0  0]
-   8  [ 4  0  0  0  0  0  0 15  0  0  0]
-   9  [ 0  0  0  0  0  3 99  0  0  0  0]
-   10 [ 0 12 13  0  0  0  0  0  0  0  0]
-
-   0, 8, 7, 2, 10, 1, 6, 9, 5, 3, 4, 7, 0
-"""
-
-"""
-     0      1   2   3   4   5   6    7   8  9   10
-  0  [0,   29, 20, 21, 16, 31, 100, 12, 4,  31, 18]
-  1  [29,  0,  15, 29, 28, 40, 72,  21, 29, 41, 12]
-  2  [20,  15, 0,  15, 14, 25, 81,  9,  23, 27, 13]
-  3  [21,  29, 15, 0,  4,  12, 92,  12, 25, 13, 25]
-  4  [16,  28, 14, 4,  0,  16, 94,  9,  20, 16, 22]
-  5  [31,  40, 25, 12, 16, 0,  95,  24, 36, 3, 37 ]
-  6  [100, 72, 81, 92, 94, 95, 0,   90, 101,99, 84]
-  7  [12,  21, 9,  12, 9,  24, 90,  0,  15, 25, 13]
-  8  [4,   29, 23, 25, 20, 36, 101, 15, 0,  35, 18]
-  9  [31,  41, 27, 13, 16, 3,  99,  25, 35, 0,  38]
- 10  [18,  12, 13, 25, 22, 37, 84,  13, 18, 38, 0 ]
-"""
 
 def findOddDegreeNodes(minSpanTree):
     oddDegreeNodes = []
@@ -165,15 +131,6 @@ def readAdjacencyMatrix(file_path):
         return None
 
 if __name__ == '__main__':
+    starTime = time.time()
     main()
-
-"""""
-1.Create a minimum spanning tree T of G.
-2.Let O be the set of vertices with odd degree in T. By the handshaking lemma, O has an even number of vertices.
-3.Find a minimum-weight perfect matching M in the induced subgraph given by the vertices from O.
-4.Combine the edges of M and T to form a connected multigraph H in which each vertex has even degree.
-5.Form an Eulerian circuit in H.
-6.Make the circuit found in previous step into a Hamiltonian circuit by skipping repeated vertices (shortcutting).
-
-
-"""""
+    print("Time taken: ", time.time() - starTime)
