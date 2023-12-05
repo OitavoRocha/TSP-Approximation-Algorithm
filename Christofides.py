@@ -21,17 +21,33 @@ def main():
     minPerfectWeightMatchingEdges = minimumPerfectWeightMatching(matrix, oddDegreeNodes)
     minPerfectWeightMatchingEdges.extend(minSpanTreeEdges)
 
-    fleury(minPerfectWeightMatchingEdges, matrix)
-    
+    edges = fleury(minPerfectWeightMatchingEdges)
+    cycle = hamiltonCycle(edges)
+    cost = calculateCost(cycle, matrix)
+    print("Cost: ", cost)    
 
-def fleury(edges, matrix):
+def fleury(edges):
     G = nx.MultiGraph()
     for edge in edges:
         G.add_edge(edge[0], edge[1])
 
     circuit = list(nx.eulerian_circuit(G, source=0))
-    cost = calculateCost(circuit, matrix)
-    print("Cost: ", cost)
+    return circuit
+
+def hamiltonCycle(edges):
+    cycle = []
+    for i in range(len(edges)):
+        if i == 0:
+            cycle.append(edges[i][0])
+            cycle.append(edges[i][1])
+        elif i == len(edges):
+            cycle.append(edges[i][0])
+            cycle.append(edges[i][1])
+        else:
+            cycle.append(edges[i][1])
+    cycle = list(dict.fromkeys(cycle))
+    cycle.append(cycle[0])
+    return cycle
 
 def prim(matrix, nodes, num_edges):
     if num_edges == 0:
@@ -104,10 +120,10 @@ def findAllEdges(graph):
 
 def calculateCost(circuit, G):
     cost = 0
-    for edge in circuit:
-        cost += G[edge[0]][edge[1]]
+    for i in range(len(circuit) - 1):
+        cost += G[circuit[i]][circuit[i + 1]]
     return cost
-
+    
 def readAdjacencyMatrix(file_path):
     try:
         with open(file_path, 'r') as file:
