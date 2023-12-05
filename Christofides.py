@@ -25,6 +25,7 @@ def main():
     cycle = hamiltonCycle(edges)
     cost = calculateCost(cycle, matrix)
     print("Cost: ", cost)    
+    print("Cycle: ", cycle)
 
 def fleury(edges):
     G = nx.MultiGraph()
