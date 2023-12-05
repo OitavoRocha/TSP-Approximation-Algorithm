@@ -72,6 +72,23 @@ def prim(matrix, nodes, num_edges):
     adjacency_matrix = np.array(adjacency_matrix)
     return adjacency_matrix, cost
 
+def main():
+    num_edges = 1
+    args = sys.argv[1]
+
+    matrix_values = readAdjacencyMatrix(args)
+    nodes = len(matrix_values)
+    
+    matrix = np.array(matrix_values)
+
+    MinSpanTree, cost = prim(matrix, nodes, num_edges)
+    minimumPerfectWeightMatching(MinSpanTree, matrix, findOddDegreeNodes(MinSpanTree))
+
+    cycle = fleuryAlgo(MinSpanTree, 0)
+    cycle = removeDuplicates(cycle)
+    print(calculateCost(cycle, matrix))
+
+
 def findOddDegreeNodes(minSpanTree):
     oddDegreeNodes = []
     for i in range(len(minSpanTree)):
