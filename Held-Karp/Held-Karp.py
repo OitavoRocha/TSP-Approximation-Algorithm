@@ -1,4 +1,4 @@
-# https://github.com/CarlEkerot/held-karp/tree/master from @CarlEkerot
+# https://github.com/CarlEkerot/held-karp/tree/master main code from @CarlEkerot with slight changes
 import itertools
 import sys
 import time
