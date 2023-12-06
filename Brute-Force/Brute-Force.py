@@ -15,7 +15,7 @@ def brute_force_tsp(dists):
         if current_cost < min_cost:
             min_cost = current_cost
             best_path = current_path
-            writeBestPath("log_brute_force.txt", best_path, min_cost)
+            writeBestPath("Brute-Force\log_brute_force.txt", best_path, min_cost)
 
 
     return min_cost, best_path
