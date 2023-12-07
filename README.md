@@ -4,8 +4,8 @@ Neste repositório estão armazenados os algoritmos implementados e os exemplos 
 Implementamos três algoritmos, dois exatos - Brute Force e Held-Karp - e um aproximativo - Christofides - o último sendo 1,5-aproximado.  
 
 Para executar os código é necessário ter o python ou python3 instalado em sua máquina. Para instalar as bibliotecas necessárias digite os códigos a seguir no prompt de comando.  
-Para baixar o numpy: <pre><code> vai aq </code></pre>
-Para baixar o networkx: <pre><code> vai aq </code></pre>
+Para baixar o numpy: <pre><code> pip install numpy </code></pre>
+Para baixar o networkx: <pre><code> pip install networkx </code></pre>
 
 ### Executando
 Para executar os algoritmos, dentro do folder principal, digite python ou python3 seguido do código que quer rodar e do arquivo de teste. Desta maneira
